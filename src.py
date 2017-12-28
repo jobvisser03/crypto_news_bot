@@ -38,19 +38,23 @@ def process_priority(item):
              'FCT': 'Factom'}
 
     # exclude when
-    block_words = ['?', 'Who', 'Why', 'hype']
+    block_words = ['?', 'Who', 'Why', 'hype', 'moon',
+                   'lambo', 'shill', 'fud', 'hodl', 'pump',
+                   'dump', 'poloniex', 'picks', 'holding', 'billionaire']
 
     # include when
-    prio_words = ['pump', 'blow', 'bull', 'grow']
+    prio_words = ['bull', 'bank', 'next', 'listed', 'announced',
+                  'accept', 'released', 'commit', 'deal ', 'consider',
+                  'news', 'source code']
 
     has_prio = any(string in item for string in prio_words)
-    print("Contains priority words: {}".format(has_prio))
+    # print("Contains priority words: {}".format(has_prio))
     has_coins = any(string in item for string in list(coins.keys()))
-    print("Contains coins: {}".format(has_coins))
+    # print("Contains coins: {}".format(has_coins))
     has_block = any(string in item for string in block_words)
-    print("Contains block words: {}".format(has_block))
+    # print("Contains block words: {}".format(has_block))
 
-    if has_prio and has_coins and not has_block:
+    if has_prio and not has_block:
         return True
     else:
         return False

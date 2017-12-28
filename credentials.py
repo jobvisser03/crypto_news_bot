@@ -10,4 +10,4 @@ reddit_secret = 'FmKJUKwwVkEBCIyUHqlSBif87BU'
 reddit_app_name = 'crypto_news_bot'
 
 # slack
-slack_bot_token = 'xoxb-289925568819-4KGqZzmrDz0puWOIqbNjIr4i'
+slack_bot_token = 'xoxb-289925568819-W9VPouxesMlqFLzMsJJoq93e'

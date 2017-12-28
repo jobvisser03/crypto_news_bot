@@ -1,11 +1,14 @@
-from src import reddit_login, slack_login, process_priority, post_to_slack
+from src import twitter_login, slack_login, process_priority, post_to_slack
 from src import RTM_READ_DELAY
 import time
+import tweepy
 
 
 def main():
-    reddit = reddit_login()
+    twitter = twitter_login()
     slack_client = slack_login()
+
+    hashtags = ['litecoin', 'ripple', 'iota']
 
     if slack_client.rtm_connect(with_team_state=False):
         print("Reddit streamer is ready")
@@ -13,18 +16,17 @@ def main():
         starterbot_id = slack_client.api_call("auth.test")["user_id"]
         channel = '#crypto-news-bot'
         while True:
-            subreddit = reddit.subreddit('cryptocurrency+cryptomarkets+altcoin')
-            for submission in subreddit.stream.submissions():
-                item = submission.title.lower()
-                link = submission.shortlink
+            tweets = tweepy.Cursor(twitter.search, q='litecoin').items(10)
+            for tweet in tweets:
+                item = tweet.text.lower()
                 if process_priority(item):
-                    print('P1-REDDIT: {}'.format(item))
-                    item = 'P1-REDDIT: {}({})'.format(item, link)
+                    print('P1-TWITTER: {}'.format(item))
+                    item = 'P1-TWITTER: {}'.format(item)
                     post_to_slack(slack_client, item, channel)
                 else:
-                    print('P0-REDDIT: {}'.format(item))
-                    item = 'P0-REDDIT: {}({})'.format(item, link)
-                    # post_to_slack(slack_client, item, channel)
+                    print('P0-TWITTER: {}'.format(item))
+                    item = 'P0-TWITTER: {}'.format(item)
+                    post_to_slack(slack_client, item, channel)
                 time.sleep(RTM_READ_DELAY)
     else:
         print("Connection failed. Exception traceback printed above.")
