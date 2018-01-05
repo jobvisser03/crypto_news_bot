@@ -17,14 +17,9 @@ def main():
             for submission in subreddit.stream.submissions():
                 item = submission.title.lower()
                 link = submission.shortlink
-                if process_priority(item):
-                    print('P1-REDDIT: {}'.format(item))
-                    item = 'P1-REDDIT: {}({})'.format(item, link)
-                    post_to_slack(slack_client, item, channel)
-                else:
-                    print('P0-REDDIT: {}'.format(item))
-                    item = 'P0-REDDIT: {}({})'.format(item, link)
-                    # post_to_slack(slack_client, item, channel)
+                prio_class = process_priority(item)
+                item = '{}: {}({})'.format(prio_class, item, link)
+                post_to_slack(slack_client, item, channel)
                 time.sleep(RTM_READ_DELAY)
     else:
         print("Connection failed. Exception traceback printed above.")
